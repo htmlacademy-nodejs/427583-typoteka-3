@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const {
   getRandomInt,
   shuffle,
@@ -20,6 +20,7 @@ const {
   FULL_TEXTS,
   CATEGORIES
 } = require(`../../mocks/mocks`);
+const chalk = require(`chalk`);
 
 const generatePosts = (count) => (
   Array(count)
@@ -35,23 +36,23 @@ const generatePosts = (count) => (
 
 module.exports = {
   name: GENERATE_COMMAND,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const countPost = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
     if (countPost > 1000) {
-      console.error(Message.ERROR_MAX_COUNT);
+      console.error(chalk.red(Message.ERROR_MAX_COUNT));
       process.exit(ExitCode.error);
     }
 
     const content = JSON.stringify(generatePosts(countPost));
 
-    fs.writeFile(FILE_NAME, content, (err) => {
-      if (err) {
-        return console.error(Message.ERROR_WRITE);
-      }
 
-      return console.info(Message.SUCCESS);
-    });
+    try {
+      await fs.writeFile(FILE_NAME, content);
+      console.info(chalk.green(Message.SUCCESS));
+    } catch (err) {
+      console.error(chalk.red(Message.ERROR_WRITE));
+    }
   }
 };
