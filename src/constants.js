@@ -31,6 +31,7 @@ const Message = {
   ERROR_CREATE_SERVER: `Ошибка при создании сервера`,
   SUCCESS: `Operation success. File created.`,
   AWAITING_CONNECTIONS: `Ожидаю соединений на `,
+  NOT_FOUND: `Not found`,
 };
 
 const HttpCode = {

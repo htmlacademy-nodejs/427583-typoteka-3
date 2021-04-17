@@ -24,8 +24,6 @@ const sendResponse = (res, statusCode, message) => {
 };
 
 const onClientConnect = async (req, res) => {
-  const notFoundMessage = `Not found`;
-
   switch (req.url) {
     case `/`:
       try {
@@ -34,12 +32,13 @@ const onClientConnect = async (req, res) => {
         const message = mocks.map((post) => `<li>${post.title}</li>`).join(``);
         sendResponse(res, HttpCode.OK, `<ul>${message}</ul>`);
       } catch (err) {
-        sendResponse(res, HttpCode.NOT_FOUND, notFoundMessage);
+        sendResponse(res, HttpCode.NOT_FOUND, Message.NOT_FOUND);
       }
 
       break;
+
     default:
-      sendResponse(res, HttpCode.NOT_FOUND, notFoundMessage);
+      sendResponse(res, HttpCode.NOT_FOUND, Message.NOT_FOUND);
       break;
   }
 };
