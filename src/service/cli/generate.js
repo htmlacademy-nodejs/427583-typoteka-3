@@ -1,11 +1,13 @@
 'use strict';
 
 const fs = require(`fs`).promises;
+
 const {
   getRandomInt,
   shuffle,
   getRandomDateWithinThreeMonths
 } = require(`../../utils`);
+
 const {
   DEFAULT_COUNT,
   FILE_NAME,
@@ -14,29 +16,43 @@ const {
   ExitCode,
   MAX_ANNOUNCE_COUNT
 } = require(`../../constants`);
-const {
-  TITLES,
-  ANNOUNCES,
-  FULL_TEXTS,
-  CATEGORIES
-} = require(`../../mocks/mocks`);
 const chalk = require(`chalk`);
 
-const generatePosts = (count) => (
+const path = require(`path`);
+
+const FILE_SENTENCES_PATH = path.resolve(`./data/sentences.txt`);
+const FILE_TITLES_PATH = path.resolve(`./data/titles.txt`);
+const FILE_CATEGORIES_PATH = path.resolve(`./data/categories.txt`);
+
+const generatePosts = (count, titles, sentences, categories) => (
   Array(count)
     .fill({})
     .map(() => ({
-      title: TITLES[getRandomInt(0, TITLES.length - 1)],
-      announce: shuffle(ANNOUNCES).slice(1, MAX_ANNOUNCE_COUNT).join(` `),
-      fullText: shuffle(FULL_TEXTS).slice(0, getRandomInt(1, TITLES.length - 1)).join(` `),
+      title: titles[getRandomInt(0, titles.length - 1)],
+      announce: shuffle(sentences).slice(1, MAX_ANNOUNCE_COUNT).join(` `),
+      fullText: shuffle(sentences).slice(0, getRandomInt(1, titles.length - 1)).join(` `),
       createdDate: getRandomDateWithinThreeMonths(),
-      category: shuffle(CATEGORIES).slice(0, getRandomInt(1, TITLES.length - 1))
+      category: shuffle(categories).slice(0, getRandomInt(1, titles.length - 1))
     }))
 );
+
+const readContent = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, `UTF-8`);
+    return content.split(`\n`).filter((stringItem) => stringItem !== ``);
+  } catch (err) {
+    console.error(chalk.red(err));
+    return [];
+  }
+};
 
 module.exports = {
   name: GENERATE_COMMAND,
   async run(args) {
+    const sentences = await readContent(FILE_SENTENCES_PATH);
+    const titles = await readContent(FILE_TITLES_PATH);
+    const categories = await readContent(FILE_CATEGORIES_PATH);
+
     const [count] = args;
     const countPost = Number.parseInt(count, 10) || DEFAULT_COUNT;
 
@@ -45,8 +61,7 @@ module.exports = {
       process.exit(ExitCode.error);
     }
 
-    const content = JSON.stringify(generatePosts(countPost));
-
+    const content = JSON.stringify(generatePosts(countPost, titles, sentences, categories));
 
     try {
       await fs.writeFile(FILE_NAME, content);
