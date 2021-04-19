@@ -27,8 +27,8 @@ const MAX_ANNOUNCE_COUNT = 5;
 
 const Message = {
   ERROR_WRITE: `Can't write data to file...`,
-  ERROR_MAX_COUNT: `Не больше 1000 публикаций`,
-  ERROR_CREATE_SERVER: `Ошибка при создании сервера`,
+  ERROR_MAX_COUNT: `Not more than 1000 publications`,
+  ERROR_CREATE_SERVER: `Server creation error`,
   SUCCESS: `Operation success. File created.`,
   AWAITING_CONNECTIONS: `Ожидаю соединений на `,
   NOT_FOUND: `Not found`,
