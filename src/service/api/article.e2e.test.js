@@ -8,93 +8,25 @@ const ArticleService = require(`../data-service/article`);
 const CommentService = require(`../data-service/comment`);
 
 const {HttpCode} = require(`../../constants`);
+const {articleMockData} = require(`../mocks`);
 
-const mockData = [{
-  "id": `KSYUdB`,
-  "title": `Лучшие рок-музыканты 20-века`,
-  "announce": `Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Достичь успеха помогут ежедневные повторения. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
-  "fullText": `Он написал больше 30 хитов.`,
-  "createdDate": `2021-05-03 19:07:05`,
-  "category": [`Железо`, `IT`, `Музыка`, `Кино`, `Программирование`, `Деревья`, `За жизнь`, `Без рамки`],
-  "comments": [{
-    "id": `dE0raH`,
-    "text": `Согласен с автором! Плюсую, но слишком много буквы! Это где ж такие красоты? Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Планируете записать видосик на эту тему? Давно не пользуюсь стационарными компьютерами. Ноутбуки победили.`
-  }, {
-    "id": `FRgn5K`,
-    "text": `Согласен с автором! Хочу такую же футболку :-) Планируете записать видосик на эту тему? Совсем немного... Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Это где ж такие красоты?`
-  }, {
-    "id": `01NMT9`,
-    "text": `Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Совсем немного... Согласен с автором! Мне кажется или я уже читал это где-то? Это где ж такие красоты? Давно не пользуюсь стационарными компьютерами. Ноутбуки победили.`
-  }, {
-    "id": `2srf3x`,
-    "text": `Плюсую, но слишком много буквы! Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Мне кажется или я уже читал это где-то? Согласен с автором! Планируете записать видосик на эту тему? Это где ж такие красоты?`
-  }]
-}, {
-  "id": `NipxpM`,
-  "title": `Как достигнуть успеха не вставая с кресла`,
-  "announce": `Простые ежедневные упражнения помогут достичь успеха. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами. Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать.`,
-  "fullText": `Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике.`,
-  "createdDate": `2021-05-14 05:21:15`,
-  "category": [`Железо`],
-  "comments": [{
-    "id": `IWQmmx`,
-    "text": `Совсем немного... Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Планируете записать видосик на эту тему? Плюсую, но слишком много буквы! Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Согласен с автором! Это где ж такие красоты?`
-  }, {
-    "id": `9XBTWe`,
-    "text": `Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Планируете записать видосик на эту тему? Это где ж такие красоты? Мне кажется или я уже читал это где-то? Хочу такую же футболку :-) Согласен с автором! Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Плюсую, но слишком много буквы!`
-  }, {
-    "id": `l6BfAa`,
-    "text": `Мне кажется или я уже читал это где-то? Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Согласен с автором! Плюсую, но слишком много буквы! Это где ж такие красоты? Планируете записать видосик на эту тему? Совсем немного... Мне не нравится ваш стиль. Ощущение, что вы меня поучаете.`
-  }]
-}, {
-  "id": `JCGo4o`,
-  "title": `Как собрать камни бесконечности`,
-  "announce": `Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Из под его пера вышло 8 платиновых альбомов. Первая большая ёлка была установлена только в 1938 году. Вы можете достичь всего. Стоит только немного постараться и запастись книгами.`,
-  "fullText": `Золотое сечение — соотношение двух величин, гармоническая пропорция. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Программировать не настолько сложно, как об этом говорят. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
-  "createdDate": `2021-03-20 23:29:56`,
-  "category": [`Кино`, `Программирование`],
-  "comments": [{
-    "id": `ngNbjB`,
-    "text": `Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Согласен с автором! Мне кажется или я уже читал это где-то? Это где ж такие красоты? Совсем немного... Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Хочу такую же футболку :-)`
-  }, {
-    "id": `SzEtpL`,
-    "text": `Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Плюсую, но слишком много буквы! Согласен с автором! Это где ж такие красоты? Мне кажется или я уже читал это где-то? Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Планируете записать видосик на эту тему? Совсем немного...`
-  }]
-}, {
-  "id": `A_VumA`,
-  "title": `Лучшие рок-музыканты 20-века`,
-  "announce": `Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Ёлки — это не просто красивое дерево. Это прочная древесина. Программировать не настолько сложно, как об этом говорят. Собрать камни бесконечности легко, если вы прирожденный герой.`,
-  "fullText": `Из под его пера вышло 8 платиновых альбомов. Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Это один из лучших рок-музыкантов. Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравятся только игры. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Достичь успеха помогут ежедневные повторения. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Простые ежедневные упражнения помогут достичь успеха.`,
-  "createdDate": `2021-04-16 08:56:23`,
-  "category": [`Без рамки`, `Музыка`, `За жизнь`],
-  "comments": [{
-    "id": `0dKMv3`,
-    "text": `Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Планируете записать видосик на эту тему? Это где ж такие красоты? Плюсую, но слишком много буквы! Мне кажется или я уже читал это где-то? Совсем немного... Согласен с автором!`
-  }]
-}, {
-  "id": `dJsGXi`,
-  "title": `Как достигнуть успеха не вставая с кресла`,
-  "announce": `Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете.`,
-  "fullText": `Собрать камни бесконечности легко, если вы прирожденный герой. Золотое сечение — соотношение двух величин, гармоническая пропорция. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете.`,
-  "createdDate": `2021-03-08 06:56:09`,
-  "category": [`IT`, `Без рамки`],
-  "comments": [{
-    "id": `XLrme1`,
-    "text": `Хочу такую же футболку :-) Давно не пользуюсь стационарными компьютерами. Ноутбуки победили. Согласен с автором! Планируете записать видосик на эту тему? Плюсую, но слишком много буквы! Это где ж такие красоты? Мне не нравится ваш стиль. Ощущение, что вы меня поучаете.`
-  }, {
-    "id": `C5ZbnX`,
-    "text": `Плюсую, но слишком много буквы! Планируете записать видосик на эту тему? Совсем немного... Мне кажется или я уже читал это где-то? Согласен с автором! Мне не нравится ваш стиль. Ощущение, что вы меня поучаете. Это где ж такие красоты? Хочу такую же футболку :-)`
-  }]
-}];
 
 const createAPI = () => {
   const app = express();
-  const clonedData = JSON.parse(JSON.stringify(mockData));
+  const clonedData = JSON.parse(JSON.stringify(articleMockData));
 
   app.use(express.json());
   article(app, new ArticleService(clonedData), new CommentService());
 
   return app;
+};
+
+const newArticle = {
+  title: `Лучшие рок-музыканты 20-века`,
+  announce: `Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Достичь успеха помогут ежедневные повторения. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
+  fullText: `Он написал больше 30 хитов.`,
+  createdDate: `2021-05-03 19:07:05`,
+  category: [`IT`, `Программирование`]
 };
 
 describe(`API returns a list of all articles`, () => {
@@ -121,4 +53,156 @@ describe(`API returns an article with given id`, () => {
   test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
   test(`Article's title is "Лучшие рок-музыканты 20-века"`,
       () => expect(response.body.title).toBe(`Лучшие рок-музыканты 20-века`));
+});
+
+describe(`API creates an article if data is valid`, () => {
+  const app = createAPI();
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .post(`/articles`)
+      .send(newArticle);
+  });
+
+  test(`Status code 201`, () => expect(response.statusCode).toBe(HttpCode.CREATED));
+  test(`Returns article created`, () => expect(response.body).toEqual(expect.objectContaining(newArticle)));
+  test(`Articles count is changed`, () => request(app)
+    .get(`/articles`)
+    .expect((res) => expect(res.body.length).toBe(6)));
+});
+
+describe(`API refuses to create an article if data is invalid`, () => {
+  const app = createAPI();
+
+  test(`Without any required property response code is 400`, async () => {
+    for (const key of Object.keys(newArticle)) {
+
+      const badArticle = {
+        ...newArticle
+      };
+      delete badArticle[key];
+
+      await request(app)
+        .post(`/articles`)
+        .send(badArticle)
+        .expect(HttpCode.BAD_REQUEST);
+    }
+  });
+});
+
+describe(`API changes existent article`, () => {
+  const app = createAPI();
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .put(`/articles/KSYUdB`)
+      .send(newArticle);
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
+  test(`Returns changed article`, () => expect(response.body).toEqual(expect.objectContaining(newArticle)));
+  test(`Article is really changed`, () => request(app)
+    .get(`/articles/KSYUdB`)
+    .expect((res) => expect(res.body.title).toBe(`Лучшие рок-музыканты 20-века`)));
+
+  test(`API returns status code 404 when trying to change non-existent article`, () => {
+    return request(app)
+      .put(`/articles/NOEXST`)
+      .send(newArticle)
+      .expect(HttpCode.NOT_FOUND);
+  });
+
+  test(`API returns status code 400 when trying to change an article with invalid data`, () => {
+    const invalidArticle = {
+      title: `Лучшие рок-музыканты 20-века`,
+      announce: `Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Достичь успеха помогут ежедневные повторения. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
+      fullText: `Он написал больше 30 хитов.`,
+      category: [`IT`, `Программирование`]
+    };
+
+    return request(app)
+      .put(`/articles/NOEXST`)
+      .send(invalidArticle)
+      .expect(HttpCode.BAD_REQUEST);
+  });
+});
+
+describe(`API returns a list of comments to given article`, () => {
+  const app = createAPI();
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .get(`/articles/KSYUdB/comments`);
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
+  test(`Returns list of 4 comments`, () => expect(response.body.length).toBe(4));
+  test(`First comment's id is "dE0raH"`, () => expect(response.body[0].id).toBe(`dE0raH`));
+});
+
+describe(`API creates a comment`, () => {
+  const newComment = {
+    text: `Валидному комментарию достаточно этого поля`
+  };
+
+  const app = createAPI();
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .post(`/articles/KSYUdB/comments`)
+      .send(newComment);
+  });
+
+  test(`Status code 201`, () => expect(response.statusCode).toBe(HttpCode.CREATED));
+  test(`Returns comment created`, () => expect(response.body).toEqual(expect.objectContaining(newComment)));
+  test(`Comments count is changed`, () => request(app)
+    .get(`/articles/KSYUdB/comments`)
+    .expect((res) => expect(res.body.length).toBe(5)));
+
+  test(`API refuses to create a comment to non-existent article and returns status code 404`, () => {
+    return request(app)
+      .post(`/articles/NOEXST/comments`)
+      .send(newComment)
+      .expect(HttpCode.NOT_FOUND);
+  });
+
+  test(`API refuses to create a comment when data is invalid, and returns status code 400`, () => {
+    return request(app)
+      .post(`/articles/KSYUdB/comments`)
+      .send({})
+      .expect(HttpCode.BAD_REQUEST);
+  });
+});
+
+describe(`API correctly deletes a comment`, () => {
+  const app = createAPI();
+  let response;
+
+  beforeAll(async () => {
+    response = await request(app)
+      .delete(`/articles/KSYUdB/comments/dE0raH`);
+  });
+
+  test(`Status code 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
+  test(`Returns comment deleted`, () => expect(response.body.id).toBe(`dE0raH`));
+  test(`Comments count is 4 now`, () => request(app)
+    .get(`/articles/KSYUdB/comments`)
+    .expect((res) => expect(res.body.length).toBe(4))
+  );
+
+  test(`API refuses to delete non-existent comment`, () => {
+    return request(app)
+      .delete(`/articles/KSYUdB/comments/NOEXST`)
+      .expect(HttpCode.NOT_FOUND);
+  });
+
+  test(`API refuses to delete a comment to non-existent article`, () => {
+    return request(app)
+      .delete(`/articles/NOEXST/comments/dE0raH`)
+      .expect(HttpCode.NOT_FOUND);
+  });
 });
