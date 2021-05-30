@@ -7,12 +7,18 @@ const {
   Message,
   API_PREFIX
 } = require(`../../constants`);
-const chalk = require(`chalk`);
 const express = require(`express`);
 const getMockData = require(`../lib/get-mock-data`);
 const getApiRoutes = require(`../api`);
+const {
+  getLogger
+} = require(`../lib/logger`);
 
 const app = express();
+
+const logger = getLogger({
+  name: `api`
+});
 
 module.exports = {
   name: SERVER_COMMAND,
@@ -27,19 +33,36 @@ module.exports = {
       .status(HttpCode.NOT_FOUND)
       .send(Message.NOT_FOUND));
 
+    app.use((req, res) => {
+      res.status(HttpCode.NOT_FOUND)
+        .send(`Not found`);
+      logger.error(`Route not found: ${req.url}`);
+    });
+
+    app.use((err, _req, _res, _next) => {
+      logger.error(`An error occurred on processing request: ${err.message}`);
+    });
+
+    app.use((req, res, next) => {
+      logger.debug(`Request on route ${req.url}`);
+      res.on(`finish`, () => {
+        logger.info(`Response status code ${res.statusCode}`);
+      });
+      next();
+    });
 
     try {
       await getMockData();
 
       app.listen(port, (err) => {
         if (err) {
-          return console.error(chalk.red(Message.ERROR_CREATE_SERVER));
+          return logger.error(Message.ERROR_CREATE_SERVER);
         }
 
-        return console.info(chalk.green(`${Message.AWAITING_CONNECTIONS}${port}`));
+        return logger.info(`${Message.AWAITING_CONNECTIONS}${port}`);
       });
     } catch (err) {
-      console.error(chalk.red(err));
+      logger.error(err);
       process.exit(1);
     }
   }

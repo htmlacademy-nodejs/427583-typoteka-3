@@ -10,16 +10,15 @@ module.exports = (app, searchService) => {
     const {query = ``} = req.query;
 
     if (!query) {
-      res.status(HttpCode.NOT_FOUND)
-          .json([]);
-      return;
+      return res.status(HttpCode.BAD_REQUEST)
+                .json([]);
     }
 
     const searchResults = searchService.findAll(query);
-    const searchStatus = searchResults > 0 ? HttpCode.OK : HttpCode.NOT_FOUND;
+    const searchStatus = searchResults.length > 0 ? HttpCode.OK : HttpCode.NOT_FOUND;
 
-    res.status(searchStatus)
-      .json(searchResults);
+    return res.status(searchStatus)
+              .json(searchResults);
   });
 
   app.use(`/search`, route);

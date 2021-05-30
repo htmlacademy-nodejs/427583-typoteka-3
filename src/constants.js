@@ -58,6 +58,11 @@ const commentKeys = [`text`];
 
 const API_PREFIX = `/api`;
 
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
 module.exports = {
   DEFAULT_COMMAND,
   GENERATE_COMMAND,
@@ -76,4 +81,5 @@ module.exports = {
   articleKeys,
   commentKeys,
   API_PREFIX,
+  Env,
 };
