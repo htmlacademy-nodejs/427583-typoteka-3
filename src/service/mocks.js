@@ -168,6 +168,8 @@ const categoryMockData = [{
   }]
 }];
 
+const mockCategories = [`Программирование`, `Кино`, `Железо`, `Музыка`];
+
 const articleMockData = [{
   "id": `KSYUdB`,
   "title": `Лучшие рок-музыканты 20-века`,
@@ -249,5 +251,6 @@ const articleMockData = [{
 module.exports = {
   searchMockData,
   categoryMockData,
-  articleMockData
+  articleMockData,
+  mockCategories,
 };

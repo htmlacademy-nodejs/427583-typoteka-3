@@ -7,8 +7,12 @@ const article = require(`./article`);
 const ArticleService = require(`../data-service/article`);
 const CommentService = require(`../data-service/comment`);
 
-const {HttpCode} = require(`../../constants`);
-const {articleMockData} = require(`../mocks`);
+const {
+  HttpCode
+} = require(`../../constants`);
+const {
+  articleMockData
+} = require(`../mocks`);
 
 
 const createAPI = () => {
@@ -29,6 +33,7 @@ const newArticle = {
   category: [`IT`, `Программирование`]
 };
 
+
 describe(`API returns a list of all articles`, () => {
   const app = createAPI();
   let response;
@@ -42,6 +47,7 @@ describe(`API returns a list of all articles`, () => {
   test(`First article's id equals "KSYUdB"`, () => expect(response.body[0].id).toBe(`KSYUdB`));
 });
 
+
 describe(`API returns an article with given id`, () => {
   const app = createAPI();
   let response;
@@ -54,6 +60,7 @@ describe(`API returns an article with given id`, () => {
   test(`Article's title is "Лучшие рок-музыканты 20-века"`,
       () => expect(response.body.title).toBe(`Лучшие рок-музыканты 20-века`));
 });
+
 
 describe(`API creates an article if data is valid`, () => {
   const app = createAPI();
@@ -72,6 +79,7 @@ describe(`API creates an article if data is valid`, () => {
     .expect((res) => expect(res.body.length).toBe(6)));
 });
 
+
 describe(`API refuses to create an article if data is invalid`, () => {
   const app = createAPI();
 
@@ -89,11 +97,34 @@ describe(`API refuses to create an article if data is invalid`, () => {
         .expect(HttpCode.BAD_REQUEST);
     }
   });
+
+  test(`Without any required property response body is equal an empty object`, async () => {
+    for (const key of Object.keys(newArticle)) {
+
+      const badArticle = {
+        ...newArticle
+      };
+      delete badArticle[key];
+
+      await request(app)
+        .post(`/articles`)
+        .send(badArticle)
+        .expect((res) => expect(res.body).toEqual({}));
+    }
+  });
 });
+
 
 describe(`API changes existent article`, () => {
   const app = createAPI();
   let response;
+
+  const invalidArticle = {
+    title: `Лучшие рок-музыканты 20-века`,
+    announce: `Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Достичь успеха помогут ежедневные повторения. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
+    fullText: `Он написал больше 30 хитов.`,
+    category: [`IT`, `Программирование`]
+  };
 
   beforeAll(async () => {
     response = await request(app)
@@ -114,20 +145,28 @@ describe(`API changes existent article`, () => {
       .expect(HttpCode.NOT_FOUND);
   });
 
-  test(`API returns status code 400 when trying to change an article with invalid data`, () => {
-    const invalidArticle = {
-      title: `Лучшие рок-музыканты 20-века`,
-      announce: `Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Достичь успеха помогут ежедневные повторения. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем.`,
-      fullText: `Он написал больше 30 хитов.`,
-      category: [`IT`, `Программирование`]
-    };
-
+  test(`API returns an empty object when trying to change non-existent article`, () => {
     return request(app)
-      .put(`/articles/NOEXST`)
+      .post(`/articles/NOEXST`)
+      .send(newArticle)
+      .expect((res) => expect(res.body).toEqual({}));
+  });
+
+  test(`API returns status code 400 when trying to change an article with invalid data`, () => {
+    return request(app)
+      .put(`/articles/KSYUdB`)
       .send(invalidArticle)
       .expect(HttpCode.BAD_REQUEST);
   });
+
+  test(`API returns an empty object in the response body when trying to change an article with invalid data`, () => {
+    return request(app)
+      .post(`/articles/KSYUdB`)
+      .send(invalidArticle)
+      .expect((res) => expect(res.body).toEqual({}));
+  });
 });
+
 
 describe(`API returns a list of comments to given article`, () => {
   const app = createAPI();
@@ -142,6 +181,7 @@ describe(`API returns a list of comments to given article`, () => {
   test(`Returns list of 4 comments`, () => expect(response.body.length).toBe(4));
   test(`First comment's id is "dE0raH"`, () => expect(response.body[0].id).toBe(`dE0raH`));
 });
+
 
 describe(`API creates a comment`, () => {
   const newComment = {
@@ -170,13 +210,28 @@ describe(`API creates a comment`, () => {
       .expect(HttpCode.NOT_FOUND);
   });
 
+  test(`API refuses to create a comment to non-existent article and returns an empty object in the response body`, () => {
+    return request(app)
+      .post(`/articles/NOEXST/comments`)
+      .send(newComment)
+      .expect((res) => expect(res.body).toEqual({}));
+  });
+
   test(`API refuses to create a comment when data is invalid, and returns status code 400`, () => {
     return request(app)
       .post(`/articles/KSYUdB/comments`)
       .send({})
       .expect(HttpCode.BAD_REQUEST);
   });
+
+  test(`API refuses to create a comment when data is invalid, and returns an empty object instead of response body`, () => {
+    return request(app)
+      .post(`/articles/KSYUdB/comments`)
+      .send({})
+      .expect((res) => expect(res.body).toEqual({}));
+  });
 });
+
 
 describe(`API correctly deletes a comment`, () => {
   const app = createAPI();
@@ -200,9 +255,21 @@ describe(`API correctly deletes a comment`, () => {
       .expect(HttpCode.NOT_FOUND);
   });
 
+  test(`API refuses to delete non-existent comment and returns an empty object in the response body`, () => {
+    return request(app)
+      .post(`/articles/KSYUdB/comments/NOEXST`)
+      .expect((res) => expect(res.body).toEqual({}));
+  });
+
   test(`API refuses to delete a comment to non-existent article`, () => {
     return request(app)
       .delete(`/articles/NOEXST/comments/dE0raH`)
       .expect(HttpCode.NOT_FOUND);
+  });
+
+  test(`API refuses to delete a comment to non-existent article and returns an empty object in the response body`, () => {
+    return request(app)
+      .post(`/articles/NOEXST/comments/dE0raH`)
+      .expect((res) => expect(res.body).toEqual({}));
   });
 });

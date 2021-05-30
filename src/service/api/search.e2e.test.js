@@ -6,8 +6,12 @@ const request = require(`supertest`);
 const search = require(`./search`);
 const SearchService = require(`../data-service/search`);
 
-const {HttpCode} = require(`../../constants`);
-const {searchMockData} = require(`../mocks`);
+const {
+  HttpCode
+} = require(`../../constants`);
+const {
+  searchMockData
+} = require(`../mocks`);
 
 
 const app = express();
@@ -38,9 +42,24 @@ describe(`API returns offer based on search query`, () => {
     .expect(HttpCode.NOT_FOUND)
   );
 
+  test(`API returns an empty object in the response body if nothing is found`,
+      () => request(app)
+    .get(`/search`)
+    .query({
+      query: `sncnsncjsjc`
+    })
+    .expect((res) => expect(res.body.length).toBe(0))
+  );
+
   test(`API returns 400 when query string is absent`,
       () => request(app)
     .get(`/search`)
     .expect(HttpCode.BAD_REQUEST)
+  );
+
+  test(`API returns an empty object in the response body when query string is absent`,
+      () => request(app)
+    .get(`/search`)
+    .expect((res) => expect(res.body.length).toBe(0))
   );
 });
