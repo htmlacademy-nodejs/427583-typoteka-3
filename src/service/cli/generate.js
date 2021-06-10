@@ -17,7 +17,8 @@ const {
   GENERATE_COMMAND,
   ExitCode,
   MAX_ANNOUNCE_COUNT,
-  MAX_ID_LENGTH
+  MAX_ID_LENGTH,
+  mockArticlePictureNames
 } = require(`../../constants`);
 const chalk = require(`chalk`);
 
@@ -42,11 +43,12 @@ const generatePosts = (count, titles, sentences, categories, comments) => (
     .fill({})
     .map(() => ({
       id: nanoid(MAX_ID_LENGTH),
+      picture: mockArticlePictureNames[getRandomInt(0, mockArticlePictureNames.length - 1)],
       title: titles[getRandomInt(0, titles.length - 1)],
       announce: shuffle(sentences).slice(1, MAX_ANNOUNCE_COUNT).join(` `),
       fullText: shuffle(sentences).slice(0, getRandomInt(1, titles.length - 1)).join(` `),
       createdDate: getRandomDateWithinThreeMonths(),
-      category: shuffle(categories).slice(0, getRandomInt(1, titles.length - 1)),
+      category: shuffle(categories).slice(0, getRandomInt(1, categories.length - 1)),
       comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments)
     }))
 );

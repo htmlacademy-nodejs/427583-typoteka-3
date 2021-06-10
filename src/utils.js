@@ -1,5 +1,7 @@
 'use strict';
 
+const {dateFormatOptions} = require(`./constants`);
+
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -21,7 +23,9 @@ const shuffle = (someArray) => {
 const THREE_MONTHS_IN_MS = 1000 * 60 * 60 * 24 * 90;
 
 const getRandomDateWithinThreeMonths = () => {
-  return new Date(Date.now() - getRandomInt(0, THREE_MONTHS_IN_MS)).toLocaleString(`sv`).replace(`T`, ``);
+  const date = new Date(Date.now() - getRandomInt(0, THREE_MONTHS_IN_MS));
+
+  return date.toLocaleString(`ru-RU`, dateFormatOptions);
 };
 
 module.exports = {
