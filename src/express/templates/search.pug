@@ -6,7 +6,11 @@ block content
       div(class='search-page__wrapper')
         h1 Поиск
         div(class='search search-page__form')
-          form(action='#' method='get')
+          form(action='/search' method='get')
             label
               input(type='text' name='search' placeholder='Что ищем?')
             button(class='search__button button button--transparent' type='submit') Найти
+          each article in results
+            .search__result
+              time.search__date(datetime=article.createdDate) #{article.createdDate}
+              a.search__link #{article.title}

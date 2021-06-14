@@ -63,6 +63,16 @@ const Env = {
   PRODUCTION: `production`
 };
 
+const mockArticlePictureNames = [`forest`, `sea`, `skyscraper`];
+
+const dateFormatOptions = {
+  year: `numeric`,
+  month: `numeric`,
+  day: `numeric`,
+  hour: `numeric`,
+  minute: `numeric`
+};
+
 module.exports = {
   DEFAULT_COMMAND,
   GENERATE_COMMAND,
@@ -82,4 +92,6 @@ module.exports = {
   commentKeys,
   API_PREFIX,
   Env,
+  mockArticlePictureNames,
+  dateFormatOptions
 };
