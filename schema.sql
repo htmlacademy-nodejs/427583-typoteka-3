@@ -35,7 +35,7 @@ CREATE TABLE comments(
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
-CREATE TABLE offer_categories(
+CREATE TABLE article_categories(
   article_id integer NOT NULL,
   category_id integer NOT NULL,
   PRIMARY KEY (article_id, category_id),
